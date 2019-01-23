@@ -202,6 +202,8 @@ const battle = function(char1, char2, hp = 15) {
     rng > 0.5 ? char1.curse(char2) : char2.blast(char1);
     console.log(`${char1.name} has ${char1.healthPoints}HP left.${char2.name} has ${char2.healthPoints}HP left.`)
   }
-  char1.healthPoints > 1 ? console.log(`${char1.name.toUpperCase()} has WON the battle!`) : console.log(`${char2.name.toUpperCase()} has WON the battle!`);
+  char1.healthPoints > 1 ? 
+  console.log(`${char1.name.toUpperCase()} has WON the battle!`, char2.destroy()) :
+   console.log(`${char2.name.toUpperCase()} has WON the battle!`, char1.destroy());
 };
 battle(villainChar, heroChar);
