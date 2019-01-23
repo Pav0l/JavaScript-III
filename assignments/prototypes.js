@@ -136,5 +136,70 @@ console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-  // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  // * Give the Hero and Villains different methods that could be used to remove health points from objects 
+  // which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+function Villain(args) {
+  Humanoid.call(this, args);
+}
+Villain.prototype = Object.create(Humanoid.prototype);
+Villain.prototype.curse = function () {
+  // console.log(`I, ${this.name}, lord of the ${this.team} cast a curse on you `)
+  return this.healthPoints -= 1;
+}
+
+function Hero (args) {
+  Humanoid.call(this, args);
+}
+Hero.prototype = Object.create(Humanoid.prototype);
+Hero.prototype.blast = function () {
+  // console.log(`I am a hero of ${this.team}! Perish under my mighty spell!`);
+  return this.healthPoints -= 1;
+}
+
+const villainChar = new Villain({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
+    width: 3,
+    height: 5,
+  },
+  healthPoints: 15,
+  name: 'Lich King',
+  team: 'Scourge',
+  weapons: [
+    'Frostmourne',
+  ],
+  language: 'Necromancer',
+});
+
+const heroChar = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: 3,
+    width: 5,
+    height: 2,
+  },
+  healthPoints: 15,
+  name: 'Anduin Wrynn',
+  team: 'Alliance',
+  weapons: [
+    'Sword',
+  ],
+  language: 'Human',
+});
+
+const battle = function(char1, char2, hp = 15) {
+  let isAlive = true;
+  char1.healthPoints = hp;
+  char2.healthPoints = hp;
+  while (isAlive) {
+    isAlive = char1.healthPoints > 1 && char2.healthPoints > 1;
+    let rng = Math.random();
+    rng > 0.5 ? char1.curse() : char2.blast();
+    console.log(`${char1.name} has ${char1.healthPoints}HP left.${char2.name} has ${char2.healthPoints}HP left.`)
+  }
+  char1.healthPoints > 1 ? console.log(`${char1.name} has WON the battle!`) : console.log(`${char2.name} has WON the battle!`);
+};
+battle(villainChar, heroChar);
