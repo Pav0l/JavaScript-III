@@ -43,7 +43,6 @@ CharacterStats.prototype.takeDamage = function() {
   return `${this.name} took damage.`
 }
 
-
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
   * team
@@ -53,6 +52,7 @@ CharacterStats.prototype.takeDamage = function() {
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
+
 function Humanoid(args) {
   CharacterStats.call(this, args);
   this.team = args.team;
@@ -63,6 +63,7 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
 Humanoid.prototype.greet = function () {
   return `${this.name} offers a greeting in ${this.language}`
 }
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -144,18 +145,18 @@ function Villain(args) {
   Humanoid.call(this, args);
 }
 Villain.prototype = Object.create(Humanoid.prototype);
-Villain.prototype.curse = function () {
-  // console.log(`I, ${this.name}, lord of the ${this.team} cast a curse on you `)
-  return this.healthPoints -= 1;
+Villain.prototype.curse = function (atckTarget) {
+  console.log(`${this.name} casted his curse on you!`)
+  return atckTarget.healthPoints -= 1;
 }
 
 function Hero (args) {
   Humanoid.call(this, args);
 }
 Hero.prototype = Object.create(Humanoid.prototype);
-Hero.prototype.blast = function () {
-  // console.log(`I am a hero of ${this.team}! Perish under my mighty spell!`);
-  return this.healthPoints -= 1;
+Hero.prototype.blast = function (atckTarget) {
+  console.log(`${this.name} attacked with his spell!`);
+  return atckTarget.healthPoints -= 1;
 }
 
 const villainChar = new Villain({
@@ -195,11 +196,12 @@ const battle = function(char1, char2, hp = 15) {
   char1.healthPoints = hp;
   char2.healthPoints = hp;
   while (isAlive) {
+    console.log('New round begins:')
     isAlive = char1.healthPoints > 1 && char2.healthPoints > 1;
     let rng = Math.random();
-    rng > 0.5 ? char1.curse() : char2.blast();
+    rng > 0.5 ? char1.curse(char2) : char2.blast(char1);
     console.log(`${char1.name} has ${char1.healthPoints}HP left.${char2.name} has ${char2.healthPoints}HP left.`)
   }
-  char1.healthPoints > 1 ? console.log(`${char1.name} has WON the battle!`) : console.log(`${char2.name} has WON the battle!`);
+  char1.healthPoints > 1 ? console.log(`${char1.name.toUpperCase()} has WON the battle!`) : console.log(`${char2.name.toUpperCase()} has WON the battle!`);
 };
 battle(villainChar, heroChar);
